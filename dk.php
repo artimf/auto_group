@@ -23,7 +23,8 @@ function randValue($length){
     return $randomString;
 }
 
-  include_once 'vk.php';
+  include_once 'lib/vk.php';
+  include_once 'lib/dBug.php';//Работа с переменными  new dBug($data);
 
   $token = 'fc0d2979994e4caa178db05c2793e5b3d57f26710beafe3d48303e5ad65114860440eb12c18c61face7ab';
   $delta = '100'; //вероятность того, что запись опубликуется на стену
@@ -45,11 +46,14 @@ function randValue($length){
   if (file_exists($in_file))  $f_in = fopen ($in_file,"r");
   while ($data = fgetcsv ($f_out, 10000, ";")) $last_post_id[] = $data[0];  
 
+  
+  
 //$my_text= iconv("WINDOWS-1251","UTF-8", $data[2]);
 //usleep(400000);//Делаем меньше запросов к vk
 
  /**/
   while($data = fgetcsv($f_in, 10000,';')){
+	 
      $my_id= $data[0];
      $my_txt = substr($data[1],1,strlen($data[1]));
      if (!in_array($my_id, $last_post_id))
