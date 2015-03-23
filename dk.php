@@ -66,7 +66,7 @@ Class auto_posting {
 					$filename=$file->getBasename(); 
 				    if(!in_array($filename, $this->last_img_id)) {//еще не брали картинку
 						$resizeObj = new resize('./img/'.$filename); //обработка
-						$resizeObj -> resizeImage(800, 600, 'crop');
+						$resizeObj -> resizeImage(700, 500, 'crop');
 						$resizeObj -> saveImage("./img/".$filename, 100);
 						return $filename;
 						}
@@ -92,12 +92,15 @@ Class auto_posting {
            if (!in_array($my_id, $this->last_post_id))
             {//берем первую запись, которая ранее не публиковалась
              $my_txt = substr($data[1],1,strlen($data[1]));
+			 if( rand( 0, 99 ) < 40 ) //Вероятность того что подтянется картинка
              $my_img=$this->get_img_name();
+			 
              $vk = new vk( $this->token, $this->delta, $this->app_id, $this->group_id );
              $vk_photo = $vk->upload_photo('./img/'.$my_img, $this->albom_id,  iconv("WINDOWS-1251","UTF-8",  $my_txt));
              $vk_post = $vk->post( iconv("WINDOWS-1251","UTF-8",  $my_txt) , $vk_photo, '_');
+			 
              fwrite($this->f_out, $my_id.';'.$my_img."\r\n");
-             echo($my_id.';'.$my_txt.'<br>');
+             echo($my_id.';'.$my_txt.';'.$my_img.'<br>');
             break;
             }
            }
@@ -108,6 +111,7 @@ Class auto_posting {
 $r = new auto_posting('in.csv');
 $r->post();
 //new dBug($r->last_img_id);
+ 
 return 1;
 //$r->sourse_csv_create('in.csv','xxx.csv',1);
  
